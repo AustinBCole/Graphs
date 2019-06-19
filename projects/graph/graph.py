@@ -55,26 +55,23 @@ class Graph:
                 for neighbor in self.vertices[v]:
                     s.push(neighbor)
 
-    def dft_recursive(self, starting_vertex, visited = None, stack = None):
+    def dft_recursive(self, starting_vertex, visited = None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        if visited == None:
-            visited = set()
-            stack = Stack()
-        stack.push(starting_vertex)
         
-        vertex = stack.pop()
-        if vertex not in visited:
-            visited.add(vertex)
-            print(f"{vertex}/n/n/n/n")
-            for neighbor in self.vertices[vertex]:
-                stack.push(neighbor)
-            self.dft_recursive(starting_vertex, visited, stack)
-        else:
-            return
+        # Had a little help. This looks nice.
+        if visited is None:
+            visited = set()
+        
+        print(starting_vertex)
+        visited.add(starting_vertex)
+        for neighbor in self.vertices[starting_vertex]:
+            if neighbor not in visited:
+                self.dft_recursive(neighbor, visited)
+                
 
 
     def bfs(self, starting_vertex, destination_vertex):
@@ -91,32 +88,29 @@ class Graph:
         queue.enqueue([starting_vertex])
         # While the queue is not empty...
         while queue.size() > 0:
-        # Dequeue the first PATH
-            first_path = queue.dequeue()
-        # GRAB THE VERTEX FROM THE END OF THE PATH
-            vertex = first_path[-1]
-        # IF VERTEX = TARGET, RETURN PATH
-            if vertex == destination_vertex:
-                return first_path
-        # If that vertex has not been visited...
+            # Dequeue the first PATH
+            path = queue.dequeue()
+            # GRAB THE VERTEX FROM THE END OF THE PATH
+            vertex = path[-1]
+            # If that vertex has not been visited...
             if vertex not in visited:
-        # Mark it as visited
-                print("add")
+                # Mark it as visited
                 visited.add(vertex)
-        # Then add A PATH TO all of its neighbors to the back of the queue
-        
-            for neighbor in self.vertices[vertex]:
-                if neighbor not in visited:
-                    print(neighbor)
-                    print(visited)
-        # Copy the path
-                    path_copy = first_path
-        # Append neighbor to the back of the copy
-                    path_copy.append(neighbor)
-                    print(path_copy)
-
-        # Enqueue copy
-                    queue.enqueue(path_copy)
+                
+                # IF VERTEX = TARGET, RETURN PATH
+                if vertex == destination_vertex:
+                    return path
+                
+                # Then add A PATH TO all of its neighbors to the back of the queue
+                for neighbor in self.vertices[vertex]:
+                    if neighbor not in visited:
+                        # Copy the path
+                        path_copy = path.copy()
+                        # Append neighbor to the back of the copy
+                        path_copy.append(neighbor)
+                    
+                        # Enqueue copy
+                        queue.enqueue(path_copy)
     
     
     
